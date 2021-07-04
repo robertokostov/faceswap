@@ -25,9 +25,10 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
 faces = detector(img1_gray)
+indexes_triangles = []
+landmarks_points1 = []
 for face in faces:
     landmarks = predictor(img1_gray, face)
-    landmarks_points1 = []
     for n in range(0, 68):
         x = landmarks.part(n).x
         y = landmarks.part(n).y
@@ -43,7 +44,6 @@ for face in faces:
     triangles = subdiv.getTriangleList()
     triangles = np.array(triangles, dtype=np.int32)
 
-    indexes_triangles = []
     for t in triangles:
         pt1 = t[0], t[1]
         pt2 = t[2], t[3]
@@ -63,9 +63,9 @@ for face in faces:
             indexes_triangles.append(triangle)
 
 faces2 = detector(img2_gray)
+landmarks_points2 = []
 for face in faces2:
     landmarks = predictor(img2_gray, face)
-    landmarks_points2 = []
     for n in range(0, 68):
         x = landmarks.part(n).x
         y = landmarks.part(n).y
@@ -96,13 +96,11 @@ for triangle_index in indexes_triangles:
     tr2 = np.array([pt1_2, pt2_2, pt3_2], np.int32)
     rect2 = cv2.boundingRect(tr2)
     x, y, w, h = rect2
-    cropped_triangle2 = img2[y: y + h, x: x + w]
     cropped_tr2_mask = np.zeros((h, w), np.uint8)
 
     points2 = np.array([[pt1_2[0] - x, pt1_2[1] - y], [pt2_2[0] - x, pt2_2[1] - y], [pt3_2[0] - x, pt3_2[1] - y]],
                        np.int32)
     cv2.fillConvexPoly(cropped_tr2_mask, points2, 255)
-    cropped_triangle2 = cv2.bitwise_and(cropped_triangle2, cropped_triangle2, mask=cropped_tr2_mask)
 
     points1 = np.float32(points1)
     points2 = np.float32(points2)
@@ -134,5 +132,9 @@ x, y, w, h = cv2.boundingRect(convexhull2)
 center_face2 = int((x + x + w) / 2), int((y + y + h) / 2)
 seamlessclone = cv2.seamlessClone(result, img2, img2_head_mask, center_face2, cv2.MIXED_CLONE)
 
+cv2.imshow("Image src", img1)
+cv2.imshow("Image dest", img2)
 cv2.imshow("New face", seamlessclone)
 
+cv2.waitKey(0)
+cv2.destroyAllWindows()
