@@ -113,8 +113,8 @@ for triangle_index in indexes_triangles:
     img2_new_face_rect_area = img2_new_face[y: y + h, x: x + w]
     img2_new_face_rect_area_gray = cv2.cvtColor(img2_new_face_rect_area, cv2.COLOR_BGR2GRAY)
 
-    # _, mask_triangles_designed = cv2.threshold(img2_new_face_rect_area_gray, 64, 255, cv2.THRESH_BINARY_INV)
-    # warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=mask_triangles_designed)
+    _, mask_triangles_designed = cv2.threshold(img2_new_face_rect_area_gray, 64, 255, cv2.THRESH_BINARY_INV)
+    warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=mask_triangles_designed)
 
     img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
     img2_new_face[y: y + h, x: x + w] = img2_new_face_rect_area
@@ -130,7 +130,7 @@ result = cv2.add(img2_head_noface, img2_new_face)
 
 x, y, w, h = cv2.boundingRect(convexhull2)
 center_face2 = int((x + x + w) / 2), int((y + y + h) / 2)
-seamlessclone = cv2.seamlessClone(result, img2, img2_head_mask, center_face2, cv2.MIXED_CLONE)
+seamlessclone = cv2.seamlessClone(result, img2, img2_head_mask, center_face2, cv2.NORMAL_CLONE)
 
 cv2.imshow("Image src", img1)
 cv2.imshow("Image dest", img2)
