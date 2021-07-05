@@ -13,8 +13,9 @@ def extract_index_nparray(nparray):
     return index
 
 
-img1 = cv2.imread("media/736px-Josip_Broz_Tito_uniform_portrait.jpg")
-img2 = cv2.imread("media/768px-Queen_Elizabeth_II_of_New_Zealand_(cropped).jpg")
+img1 = cv2.imread("media/GGIA-HumanFace.jpg")
+img2 = cv2.imread("media/113221288-human-face-can-be-different-with-strong-expressions-and-emotions-surprised-"
+                  "shocked-emotional-big-eye.jpg")
 
 img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
@@ -71,7 +72,7 @@ for face in faces2:
         y = landmarks.part(n).y
         landmarks_points2.append((x, y))
 
-img2_new_face = np.zeros((1024, 768, 3), np.uint8)
+img2_new_face = np.zeros(img2.shape, np.uint8)
 
 for triangle_index in indexes_triangles:
     pt1_1 = landmarks_points1[triangle_index[0]]
@@ -113,7 +114,7 @@ for triangle_index in indexes_triangles:
     img2_new_face_rect_area = img2_new_face[y: y + h, x: x + w]
     img2_new_face_rect_area_gray = cv2.cvtColor(img2_new_face_rect_area, cv2.COLOR_BGR2GRAY)
 
-    _, mask_triangles_designed = cv2.threshold(img2_new_face_rect_area_gray, 64, 255, cv2.THRESH_BINARY_INV)
+    _, mask_triangles_designed = cv2.threshold(img2_new_face_rect_area_gray, 1, 255, cv2.THRESH_BINARY_INV)
     warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=mask_triangles_designed)
 
     img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
