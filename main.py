@@ -13,9 +13,8 @@ def extract_index_nparray(nparray):
     return index
 
 
-img1 = cv2.imread("media/GGIA-HumanFace.jpg")
-img2 = cv2.imread("media/113221288-human-face-can-be-different-with-strong-expressions-and-emotions-surprised-"
-                  "shocked-emotional-big-eye.jpg")
+img1 = cv2.imread("media/736px-Josip_Broz_Tito_uniform_portrait.jpg")
+img2 = cv2.imread("media/768px-Queen_Elizabeth_II_of_New_Zealand_(cropped).jpg")
 
 img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
